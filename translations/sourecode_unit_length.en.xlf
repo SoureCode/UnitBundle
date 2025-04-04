@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
+    <body>
+      <trans-unit id="28">
+        <source>KILO</source>
+        <target>Kilometre</target>
+      </trans-unit>
+      <trans-unit id="29">
+        <source>HECTO</source>
+        <target>Hectometre</target>
+      </trans-unit>
+      <trans-unit id="30">
+        <source>DECA</source>
+        <target>Decametre</target>
+      </trans-unit>
+      <trans-unit id="31">
+        <source>BASE</source>
+        <target>Metre</target>
+      </trans-unit>
+      <trans-unit id="32">
+        <source>DECI</source>
+        <target>Decimetre</target>
+      </trans-unit>
+      <trans-unit id="33">
+        <source>CENTI</source>
+        <target>Centimetre</target>
+      </trans-unit>
+      <trans-unit id="34">
+        <source>MILLI</source>
+        <target>Millimetre</target>
+      </trans-unit>
+      <trans-unit id="35">
+        <source>MICRO</source>
+        <target>Micrometre</target>
+      </trans-unit>
+      <trans-unit id="36">
+        <source>NANO</source>
+        <target>Nanometre</target>
+      </trans-unit>
+      <trans-unit id="37">
+        <source>PICO</source>
+        <target>Picometre</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

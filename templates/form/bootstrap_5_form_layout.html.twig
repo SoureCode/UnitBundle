@@ -1,0 +1,9 @@
+{%- block sourecode_unit_length_widget -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) -%}
+    <div {{ block('widget_container_attributes') }}>
+        <div class="input-group">
+            {{ form_widget(form.value) }}
+            {{ form_widget(form.prefix) }}
+        </div>
+    </div>
+{%- endblock -%}

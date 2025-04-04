@@ -8,6 +8,15 @@
          bootstrap="./vendor/autoload.php"
          cacheDirectory=".phpunit.cache"
          backupStaticProperties="false"
+
+         displayDetailsOnTestsThatTriggerErrors="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         displayDetailsOnIncompleteTests="true"
+         displayDetailsOnPhpunitNotices="true"
+         displayDetailsOnSkippedTests="true"
 >
   <testsuites>
     <testsuite name="Test Suite">

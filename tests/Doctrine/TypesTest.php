@@ -3,6 +3,7 @@
 namespace SoureCode\Bundle\Unit\Tests\Doctrine;
 
 use App\Entity\Goal;
+use Doctrine\ORM\EntityRepository;
 use SoureCode\Bundle\Unit\Model\Metric\Length\Meter;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -11,6 +12,10 @@ use SoureCode\Bundle\Unit\Tests\AbstractKernelTestCase;
 
 final class TypesTest extends AbstractKernelTestCase
 {
+    private EntityRepository $repository;
+
+    private EntityManagerInterface $entityManager;
+
     protected function setUp(): void
     {
         $container = self::getContainer();

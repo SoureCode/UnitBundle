@@ -2,7 +2,6 @@
 
 namespace SoureCode\Bundle\Unit\Form;
 
-use SoureCode\Bundle\Unit\Model\Metric\Core\AbstractPicoUnit;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -46,7 +45,7 @@ class ValueType extends AbstractType
         $resolver->setDefaults([
             'html5' => true,
             'grouping' => false,
-            'scale' => AbstractPicoUnit::getFactor()->scale,
+            'scale' => 12,
             'input' => 'string',
             'empty_data' => '',
         ]);

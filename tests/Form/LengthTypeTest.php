@@ -2,65 +2,45 @@
 
 namespace SoureCode\Bundle\Unit\Tests\Form;
 
-use SoureCode\Bundle\Unit\Form\LengthType;
-use SoureCode\Bundle\Unit\Model\Metric\Converter;
-use SoureCode\Bundle\Unit\Model\Metric\Factory;
-use SoureCode\Bundle\Unit\Model\Metric\Length\Centimeter;
-use SoureCode\Bundle\Unit\Model\Metric\Length\Kilometer;
-use SoureCode\Bundle\Unit\Model\Metric\Length\Meter;
-use SoureCode\Bundle\Unit\Model\Metric\Prefix;
+use SoureCode\Bundle\Unit\Form\UnitType;
+use SoureCode\Bundle\Unit\Model\AbstractUnit;
+use SoureCode\Bundle\Unit\Model\Length\AbstractLengthUnit;
+use SoureCode\Bundle\Unit\Model\Length\Centimeter;
+use SoureCode\Bundle\Unit\Model\Length\Kilometer;
+use SoureCode\Bundle\Unit\Model\Length\Meter;
+use SoureCode\Bundle\Unit\Model\Length\LengthUnitType;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class LengthTypeTest extends TypeTestCase
 {
-    protected function getTypes(): array
-    {
-        $mapping = [
-            Prefix::KILO->value => Kilometer::class,
-            Prefix::BASE->value => Meter::class,
-            Prefix::CENTI->value => Centimeter::class,
-        ];
-
-        $factory = new Factory($mapping);
-        $converter = new Converter($mapping);
-
-        return [
-            new LengthType(
-                mapping: $mapping,
-                factory: $factory,
-                converter: $converter,
-            ),
-        ];
-    }
-
     public function testSubmitValidData(): void
     {
         // Arrange
-        $form = $this->factory->create(LengthType::class);
-
-        $expected = new Centimeter("10.6");
+        $form = $this->factory->create(UnitType::class);
 
         // Act
         $form->submit([
             'value' => '10.6',
-            'prefix' => 'centi',
+            'unit_type' => LengthUnitType::CENTIMETER->value,
         ]);
 
         // Assert
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals($expected, $form->getData());
+        $this->assertEquals(new Centimeter("10.6"), $form->getData());
     }
 
-    public function testConfigureTargetPrefix(): void
+    public function testConfigureTargetUnitType(): void
     {
         // Arrange
-        $form = $this->factory->create(LengthType::class, null, ['target_prefix' => Prefix::KILO]);
+        $form = $this->factory->create(UnitType::class, null, [
+            'target_unit_class' => Kilometer::class,
+        ]);
         $expected = new Kilometer("321.654");
 
         // Act
         $form->submit([
             'value' => '321654',
-            'prefix' => Prefix::BASE->value,
+            'unit_type' => LengthUnitType::METER->value,
         ]);
 
         // Assert
@@ -71,7 +51,7 @@ class LengthTypeTest extends TypeTestCase
     public function testSubmitNull(): void
     {
         // Arrange
-        $form = $this->factory->create(LengthType::class);
+        $form = $this->factory->create(UnitType::class);
 
         // Act
         $form->submit(null);
@@ -84,20 +64,20 @@ class LengthTypeTest extends TypeTestCase
     public function testWithPreData(): void
     {
         // Arrange
-        $form = $this->factory->create(LengthType::class, new Centimeter("10.6"));
+        $form = $this->factory->create(UnitType::class, new Centimeter("10.6"));
 
         // Act
         $view = $form->createView();
 
         // Assert
         $this->assertEquals('10.6', $view->children['value']->vars['value']);
-        $this->assertEquals(Prefix::CENTI->value, $view->children['prefix']->vars['value']);
+        $this->assertEquals(LengthUnitType::CENTIMETER->value, $view->children['unit_type']->vars['value']);
     }
 
     public function testWithNullPreData(): void
     {
         // Arrange
-        $form = $this->factory->create(LengthType::class, null);
+        $form = $this->factory->create(UnitType::class, null);
 
         // Act
         $view = $form->createView();
@@ -105,6 +85,6 @@ class LengthTypeTest extends TypeTestCase
         // Assert
         $this->assertNull($view->vars['value']);
         $this->assertEmpty($view->children['value']->vars['value']);
-        $this->assertSame('base', $view->children['prefix']->vars['value']);
+        $this->assertEmpty('', $view->children['unit_type']->vars['value']);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use SoureCode\Bundle\Unit\Doctrine\DBAL\Types\LengthType;
-use SoureCode\Bundle\Unit\Model\Metric\Length\LengthUnitInterface;
+use SoureCode\Bundle\Unit\Model\Length\LengthUnitInterface;
 
 #[ORM\Entity()]
 class Goal

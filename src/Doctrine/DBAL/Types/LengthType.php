@@ -5,12 +5,9 @@ namespace SoureCode\Bundle\Unit\Doctrine\DBAL\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\FloatType;
-use SoureCode\Bundle\Unit\Model\Metric\ConverterInterface;
-use SoureCode\Bundle\Unit\Model\Metric\FactoryInterface;
-use SoureCode\Bundle\Unit\Model\Metric\Length\LengthUnitInterface;
-use SoureCode\Bundle\Unit\Model\Metric\Length\Picometer;
-use SoureCode\Bundle\Unit\Model\Metric\NormalizerInterface;
-use SoureCode\Bundle\Unit\Model\Metric\UnitInterface;
+use SoureCode\Bundle\Unit\Model\Length\LengthUnitInterface;
+use SoureCode\Bundle\Unit\Model\Length\Picometer;
+use SoureCode\Bundle\Unit\Model\UnitInterface;
 
 class LengthType extends FloatType
 {
@@ -21,10 +18,6 @@ class LengthType extends FloatType
      */
     public static string $databaseUnitClass = Picometer::class;
 
-    public static ConverterInterface $converter;
-    public static FactoryInterface $factory;
-    public static NormalizerInterface $normalizer;
-
     public function convertToPHPValue($value, AbstractPlatform $platform): ?UnitInterface
     {
         $value = parent::convertToPHPValue($value, $platform);
@@ -33,9 +26,12 @@ class LengthType extends FloatType
             return null;
         }
 
-        $databaseUnit = self::$factory->create($value, self::$databaseUnitClass::getPrefix());
+        /**
+         * @var UnitInterface $databaseUnit
+         */
+        $databaseUnit = new self::$databaseUnitClass($value);
 
-        return self::$normalizer->normalize($databaseUnit);
+        return $databaseUnit->normalize();
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
@@ -48,7 +44,7 @@ class LengthType extends FloatType
             throw ConversionException::conversionFailedInvalidType($value, $this->getName(), [UnitInterface::class]);
         }
 
-        $databaseUnit = self::$converter->convert($value, self::$databaseUnitClass::getPrefix());
+        $databaseUnit = $value->convert(self::$databaseUnitClass);
 
         return parent::convertToDatabaseValue((string) $databaseUnit->getValue(), $platform);
     }

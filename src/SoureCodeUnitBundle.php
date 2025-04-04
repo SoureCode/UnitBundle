@@ -101,6 +101,7 @@ final class SoureCodeUnitBundle extends AbstractBundle
                 ->set(self::$PREFIX.'form.length_type', Form\LengthType::class)
                 ->args([
                     param(self::$PREFIX.'length.mapping'),
+                    service(self::$PREFIX.'length.factory'),
                     service(self::$PREFIX.'length.converter'),
                 ])
                 ->tag('form.type');

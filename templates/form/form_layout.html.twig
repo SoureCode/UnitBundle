@@ -1,11 +1,11 @@
-{%- block sourecode_unit_distance -%}
+{%- block sourecode_unit_distance_widget -%}
     <div {{ block('widget_container_attributes') }}>
         {{ form_widget(form.value) }}
         {{ form_widget(form.unit) }}
     </div>
 {%- endblock -%}
 
-{%- block sourecode_unit_duration -%}
+{%- block sourecode_unit_duration_widget -%}
     <div {{ block('widget_container_attributes') }}>
         {% if units.year %}
             {{ form_widget(form.year) }}

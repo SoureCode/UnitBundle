@@ -1,4 +1,4 @@
-{%- block sourecode_unit_distance -%}
+{%- block sourecode_unit_distance_widget -%}
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) -%}
     <div {{ block('widget_container_attributes') }}>
         <div class="input-group">
@@ -9,7 +9,7 @@
 {%- endblock -%}
 
 
-{%- block sourecode_unit_duration -%}
+{%- block sourecode_unit_duration_widget -%}
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) -%}
     <div {{ block('widget_container_attributes') }}>
         <div class="input-group">

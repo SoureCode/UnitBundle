@@ -13,7 +13,7 @@ use SoureCode\Bundle\Unit\Model\Time\TimeUnitInterface;
 use SoureCode\Bundle\Unit\Model\Time\Week;
 use SoureCode\Bundle\Unit\Model\Time\Year;
 
-final class Duration
+final class Duration implements \Stringable
 {
     /**
      * @var array{years: int, months: int, days: int, hours: int, minutes: int, seconds: int}|null
@@ -269,5 +269,10 @@ final class Duration
     public function getValue(): TimeUnitInterface
     {
         return $this->value;
+    }
+
+    public function __toString()
+    {
+        return $this->format();
     }
 }

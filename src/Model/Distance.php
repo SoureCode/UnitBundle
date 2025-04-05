@@ -7,7 +7,7 @@ use SoureCode\Bundle\Unit\Model\Length\Kilometer;
 use SoureCode\Bundle\Unit\Model\Length\LengthUnitInterface;
 use SoureCode\Bundle\Unit\Model\Length\Meter;
 
-final class Distance
+final class Distance implements \Stringable
 {
     private LengthUnitInterface $value;
 
@@ -101,5 +101,10 @@ final class Distance
     public function getValue(): LengthUnitInterface
     {
         return $this->value;
+    }
+
+    public function __toString()
+    {
+        return $this->format();
     }
 }

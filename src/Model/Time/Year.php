@@ -18,6 +18,6 @@ class Year extends AbstractTimeUnit
 
     public static function getFactor(): Number
     {
-        return new Number(365 * 24 * 60 * 60);
+        return new Number(12 * 30 * 24 * 60 * 60);
     }
 }

@@ -7,7 +7,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\Attributes\DataProvider;
+use SoureCode\Bundle\Unit\Model\Distance;
+use SoureCode\Bundle\Unit\Model\Duration;
 use SoureCode\Bundle\Unit\Model\Length\Meter;
+use SoureCode\Bundle\Unit\Model\Time\Hour;
 use SoureCode\Bundle\Unit\Tests\AbstractKernelTestCase;
 
 final class TypesTest extends AbstractKernelTestCase
@@ -29,13 +32,12 @@ final class TypesTest extends AbstractKernelTestCase
         $this->repository = $this->entityManager->getRepository(Goal::class);
     }
 
-    #[DataProvider('lengthUnitDataProvider')]
-    public function testLengthUnit(string $input, string $expected): void
+    #[DataProvider('distanceTypeDataProvider')]
+    public function testDistanceType(string $input, string $expected): void
     {
         // Arrange
-        $unit = new Meter($input);
         $goal = new Goal();
-        $goal->setTarget($unit);
+        $goal->setTargetDistance(Distance::create(new Meter($input)));
 
         // Act & Assert
         $this->entityManager->persist($goal);
@@ -47,10 +49,10 @@ final class TypesTest extends AbstractKernelTestCase
         $goal = $this->repository->find($id);
 
         $this->assertInstanceOf(Goal::class, $goal);
-        $this->assertEquals($expected, $goal->getTarget()->format());
+        $this->assertEquals($expected, $goal->getTargetDistance()->format());
     }
 
-    public static function lengthUnitDataProvider(): array
+    public static function distanceTypeDataProvider(): array
     {
         return [
             ['0.0', '0m'],
@@ -76,6 +78,54 @@ final class TypesTest extends AbstractKernelTestCase
             ['0.000000001', '1nm'],
             ['1e-5', '10μm'],
             ['1e5', '100km'],
+        ];
+    }
+
+    #[DataProvider('durationTypeDataProvider')]
+    public function testDurationType(string $input, string $expected): void
+    {
+        // Arrange
+        $goal = new Goal();
+        $goal->setTargetDuration(Duration::create(new Hour($input)));
+
+        // Act & Assert
+        $this->entityManager->persist($goal);
+        $this->entityManager->flush();
+
+        // Assert
+        $id = $goal->getId();
+        $this->entityManager->clear();
+        $goal = $this->repository->find($id);
+
+        $this->assertInstanceOf(Goal::class, $goal);
+        $this->assertEquals($expected, $goal->getTargetDuration()->totalSeconds()->getValue());
+    }
+
+    public static function durationTypeDataProvider(): array
+    {
+        return [
+            ["0", "0"],
+            ["1", "3600"],
+            ["2", "7200"],
+            ["5", "18000"],
+            ["10", "36000"],
+            ["24", "86400"],
+            ["0.5", "1800"],
+            ["1.25", "4500"],
+            ["1.5", "5400"],
+            ["2.75", "9900"],
+            ["100", "360000"],
+            ["0.001", "3.6"],
+            // @note: just works because the scale is so high. >:D (never do that)
+            ["0.000277777777777777777778", "1"],
+            ["0.0000001", "0.00036"],
+            ["1.0000001", "3600.00036"],
+            ["0.999999", "3599.9964"],
+            ["1.000001", "3600.0036"],
+            ["1e1", "36000"],
+            ["2.5e-1", "900"],
+            ["0.0000000001", "0.00000036"],
+            ["10000", "36000000"],
         ];
     }
 }

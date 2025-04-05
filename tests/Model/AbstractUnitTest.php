@@ -233,7 +233,8 @@ AbstractUnitTest extends TestCase
         $result = $base->convert(Meter::class);
 
         // Assert
-        self::assertSame($base, $result, 'convert to same prefix failed');
+        self::assertEquals($base, $result, 'Assert same value');
+        self::assertNotSame($base, $result, 'Assert not the same instance');
     }
 
     public function testConversionIntoInvalidPrefix(): void

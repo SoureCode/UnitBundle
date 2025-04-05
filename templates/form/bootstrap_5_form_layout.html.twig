@@ -1,9 +1,61 @@
-{%- block sourecode_unit_length_widget -%}
+{%- block sourecode_unit_distance -%}
     {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) -%}
     <div {{ block('widget_container_attributes') }}>
         <div class="input-group">
             {{ form_widget(form.value) }}
             {{ form_widget(form.prefix) }}
+        </div>
+    </div>
+{%- endblock -%}
+
+
+{%- block sourecode_unit_duration -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-inline')|trim}) -%}
+    <div {{ block('widget_container_attributes') }}>
+        <div class="input-group">
+            {% if units.year %}
+                {{ form_widget(form.year) }}
+            {% endif %}
+
+            {% if units.month %}
+                {% if units.year %}
+                    <span class="input-group-text">{{ '.' }}</span>
+                {% endif %}
+
+                {{ form_widget(form.month) }}
+            {% endif %}
+
+            {% if units.day %}
+                {% if units.year or units.month %}
+                    <span class="input-group-text">{{ '.' }}</span>
+                {% endif %}
+
+                {{ form_widget(form.day) }}
+            {% endif %}
+
+            {% if units.hour %}
+                {% if units.year or units.month or units.day %}
+                    <span class="input-group-text">{{ '.' }}</span>
+                {% endif %}
+
+                {{ form_widget(form.hour) }}
+            {% endif %}
+
+            {% if units.minute %}
+                {% if units.year or units.month or units.day or units.hour %}
+                    <span class="input-group-text">{{ ':' }}</span>
+                {% endif %}
+
+                {{ form_widget(form.minute) }}
+            {% endif %}
+
+            {% if units.second %}
+                {% if units.year or units.month or units.day or units.hour or units.minute %}
+                    <span class="input-group-text">{{ ':' }}</span>
+                {% endif %}
+
+                {{ form_widget(form.second) }}
+            {% endif %}
         </div>
     </div>
 {%- endblock -%}

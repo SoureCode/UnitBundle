@@ -2,7 +2,6 @@
 
 namespace SoureCode\Bundle\Unit\Form;
 
-use SoureCode\Bundle\Unit\Model\Length\AbstractLengthUnit;
 use SoureCode\Bundle\Unit\Model\UnitInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -15,7 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @template-extends AbstractType<string>
  */
-class UnitTypeType extends AbstractType
+class UnitChoiceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -23,7 +22,7 @@ class UnitTypeType extends AbstractType
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($options) {
                 if (null === $event->getData()) {
-                    $event->setData($options['default_unit_type']);
+                    $event->setData($options['default_unit_class']);
                 }
             }
         );
@@ -46,8 +45,8 @@ class UnitTypeType extends AbstractType
                 'choices' => $choices,
                 'choice_translation_domain' => 'sourecode_unit_type',
 
-                'unit_class' => AbstractLengthUnit::class,
-                'default_unit_type' => null,
+                'unit_class' => null,
+                'default_unit_class' => null,
             ]);
 
         $resolver->setAllowedValues('unit_class', function (?string $value): bool {
@@ -58,7 +57,7 @@ class UnitTypeType extends AbstractType
             return is_subclass_of($value, UnitInterface::class);
         });
 
-        $resolver->setAllowedValues('default_unit_type', function (?string $value): bool {
+        $resolver->setAllowedValues('default_unit_class', function (?string $value): bool {
             return is_subclass_of($value, UnitInterface::class) || null === $value;
         });
     }
@@ -70,6 +69,6 @@ class UnitTypeType extends AbstractType
 
     public function getBlockPrefix(): string
     {
-        return 'sourecode_unit_unit_type';
+        return 'sourecode_unit_unit_choice_type';
     }
 }

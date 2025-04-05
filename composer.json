@@ -23,6 +23,7 @@
         "doctrine/doctrine-bundle": "^2.13.2",
         "doctrine/orm": "^3.3.2",
         "ergebnis/composer-normalize": "^2.45",
+        "jetbrains/phpstorm-attributes": "^1.2",
         "nyholm/symfony-bundle-test": "^3.0",
         "php-cs-fixer/shim": "^3.75",
         "phpunit/phpunit": "^12.1",

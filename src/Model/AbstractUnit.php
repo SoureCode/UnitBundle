@@ -151,22 +151,26 @@ abstract class AbstractUnit implements UnitInterface
     abstract public static function getMapping(): array;
 
     /**
-     * @param class-string<UnitInterface> $targetUnitClass
+     * @param class-string<UnitInterface>|string $targetUnitClassOrType
      */
-    public function convert(string $targetUnitClass): UnitInterface
+    public function convert(string $targetUnitClassOrType): UnitInterface
     {
         $mapping = static::getMapping();
 
-        if (!\in_array($targetUnitClass, $mapping, true)) {
-            throw new \InvalidArgumentException(\sprintf("Conversion from '%s' to '%s' is not supported.", static::class, $targetUnitClass));
+        if (!\in_array($targetUnitClassOrType, $mapping, true)) {
+            if (!\array_key_exists($targetUnitClassOrType, $mapping)) {
+                throw new \InvalidArgumentException(\sprintf("Conversion from '%s' to '%s' is not supported.", static::class, $targetUnitClassOrType));
+            }
+
+            $targetUnitClassOrType = $mapping[$targetUnitClassOrType];
         }
 
-        if (static::class === $targetUnitClass) {
-            return $this;
+        if (static::class === $targetUnitClassOrType) {
+            return clone $this;
         }
 
         $valueFactor = $this::getFactor();
-        $targetFactor = $targetUnitClass::getFactor();
+        $targetFactor = $targetUnitClassOrType::getFactor();
 
         $value = $this->getValue();
 
@@ -178,7 +182,7 @@ abstract class AbstractUnit implements UnitInterface
 
         $convertedValue = self::fixTrailingZeros($baseValue->div($targetFactor));
 
-        return new $targetUnitClass($convertedValue);
+        return new $targetUnitClassOrType($convertedValue);
     }
 
     public function normalize(): UnitInterface
@@ -207,7 +211,7 @@ abstract class AbstractUnit implements UnitInterface
         return $shortest;
     }
 
-    public static function create(Number|string|int|float $value, string $unitType): UnitInterface
+    public static function create(Number|string|int|float $value, string $unitType): static
     {
         $mapping = static::getMapping();
 

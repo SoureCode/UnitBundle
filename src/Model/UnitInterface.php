@@ -24,12 +24,9 @@ interface UnitInterface extends \Stringable
 
     public function round(int $precision = 0, \RoundingMode $mode = \RoundingMode::HalfAwayFromZero): static;
 
-    /**
-     * @param class-string<UnitInterface> $targetUnitClass
-     */
-    public function convert(string $targetUnitClass): self;
+    public function convert(string $targetUnitClassOrType): self;
 
     public function normalize(): self;
 
-    public static function create(Number|string|int|float $value, string $unitType): self;
+    public static function create(Number|string|int|float $value, string $unitType): static;
 }

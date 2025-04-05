@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use SoureCode\Bundle\Unit\Doctrine\DBAL\Types\LengthType;
-use SoureCode\Bundle\Unit\Model\Length\LengthUnitInterface;
+use SoureCode\Bundle\Unit\Doctrine\DBAL\Types\DistanceType;
+use SoureCode\Bundle\Unit\Doctrine\DBAL\Types\DurationType;
+use SoureCode\Bundle\Unit\Model\Distance;
+use SoureCode\Bundle\Unit\Model\Duration;
 
 #[ORM\Entity()]
 class Goal
@@ -14,23 +16,37 @@ class Goal
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: LengthType::NAME)]
-    private ?LengthUnitInterface $target = null;
+    #[ORM\Column(type: DistanceType::NAME, nullable: true)]
+    private ?Distance $targetDistance = null;
+
+    #[ORM\Column(type: DurationType::NAME, nullable: true)]
+    private ?Duration $targetDuration = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTarget(): ?LengthUnitInterface
+    public function getTargetDistance(): ?Distance
     {
-        return $this->target;
+        return $this->targetDistance;
     }
 
-    public function setTarget(LengthUnitInterface $target): static
+    public function setTargetDistance(Distance $targetDistance): static
     {
-        $this->target = $target;
+        $this->targetDistance = $targetDistance;
 
+        return $this;
+    }
+
+    public function getTargetDuration(): ?Duration
+    {
+        return $this->targetDuration;
+    }
+
+    public function setTargetDuration(?Duration $targetDuration): Goal
+    {
+        $this->targetDuration = $targetDuration;
         return $this;
     }
 }

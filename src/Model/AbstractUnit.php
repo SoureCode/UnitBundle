@@ -145,6 +145,27 @@ abstract class AbstractUnit implements UnitInterface
         return new static($this->value->round($precision, $mode));
     }
 
+    public function ceil(): static
+    {
+        return new static($this->value->round(0, \RoundingMode::AwayFromZero));
+    }
+
+    public function floor(): static
+    {
+        return new static($this->value->round(0, \RoundingMode::TowardsZero));
+    }
+
+    public function abs(): static
+    {
+        $value = $this->value->value;
+
+        if (str_starts_with($value, '-')) {
+            $value = substr($value, 1);
+        }
+
+        return new static($value);
+    }
+
     /**
      * @return array<string, class-string<UnitInterface>>
      */

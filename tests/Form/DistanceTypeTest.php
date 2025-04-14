@@ -3,6 +3,7 @@
 namespace Form;
 
 use SoureCode\Bundle\Unit\Form\DistanceType;
+use SoureCode\Bundle\Unit\Model\Distance;
 use SoureCode\Bundle\Unit\Model\Length\Centimeter;
 use SoureCode\Bundle\Unit\Model\Length\Kilometer;
 use SoureCode\Bundle\Unit\Model\Length\LengthUnitType;
@@ -23,7 +24,7 @@ class DistanceTypeTest extends TypeTestCase
 
         // Assert
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals('106mm', $form->getData()->format());
+        $this->assertEquals('1.06dm', $form->getData()->format());
     }
 
     public function testSubmitNull(): void
@@ -42,14 +43,15 @@ class DistanceTypeTest extends TypeTestCase
     public function testWithPreData(): void
     {
         // Arrange
-        $form = $this->factory->create(DistanceType::class, new Centimeter("10.6"));
+        $distance = new Distance(new Centimeter("10.6"));
+        $form = $this->factory->create(DistanceType::class, $distance);
 
         // Act
         $view = $form->createView();
 
         // Assert
-        $this->assertEquals('10.6', $view->children['value']->vars['value']);
-        $this->assertEquals(LengthUnitType::CENTIMETER->value, $view->children['unit']->vars['value']);
+        $this->assertEquals('1.06', $view->children['value']->vars['value']);
+        $this->assertEquals(LengthUnitType::DECIMETER->value, $view->children['unit']->vars['value']);
     }
 
     public function testWithNullPreData(): void

@@ -33,7 +33,7 @@ class DistanceType extends AbstractType
                     return null;
                 }
 
-                $value = $data->getValue();
+                $value = $data->getValue()->normalize();
 
                 return [
                     'value' => (string) $value->getValue(),

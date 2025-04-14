@@ -209,27 +209,48 @@ abstract class AbstractUnit implements UnitInterface
     public function normalize(): UnitInterface
     {
         $mapping = static::getMapping();
-        $sourceUnitClass = $mapping[static::getUnitType()] ?? null;
 
-        if (null === $sourceUnitClass) {
-            throw new \InvalidArgumentException(\sprintf("Normalization from '%s' is not supported.", static::class));
+        if (0 === $this->value->compare(new Number(0))) {
+            return new static(0);
         }
 
-        $shortest = $this;
+        $candidates = [];
 
-        foreach ($mapping as $targetUnitClass) {
-            if (static::class === $targetUnitClass) {
-                continue;
-            }
+        foreach ($mapping as $unitClass) {
+            $converted = $this->convert($unitClass);
+            $absValue = abs((float) $converted->getValue()->value);
 
-            $converted = $this->convert($targetUnitClass);
-
-            if (\strlen($converted->format()) < \strlen($shortest->format())) {
-                $shortest = $converted;
+            // Collect candidates where the number is at least 1.
+            if ($absValue >= 1) {
+                $candidates[] = [
+                    'unit' => $converted,
+                    'value' => $absValue,
+                ];
             }
         }
 
-        return $shortest;
+        // >= 1
+        if (0 !== \count($candidates)) {
+            usort($candidates, static function ($a, $b) {
+                return $a['value'] <=> $b['value'];
+            });
+
+            return $candidates[0]['unit'];
+        }
+
+        // < 1
+        $bestCandidate = null;
+
+        foreach ($mapping as $unitClass) {
+            $converted = $this->convert($unitClass);
+            $absValue = abs((float) $converted->getValue()->value);
+
+            if (null === $bestCandidate || $absValue > $bestCandidate['value']) {
+                $bestCandidate = ['unit' => $converted, 'value' => $absValue];
+            }
+        }
+
+        return $bestCandidate['unit'] ?? $this;
     }
 
     public static function create(Number|string|int|float $value, string $unitType): static

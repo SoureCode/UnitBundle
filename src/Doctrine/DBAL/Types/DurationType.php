@@ -32,7 +32,7 @@ class DurationType extends FloatType
          */
         $databaseUnit = new static::$databaseUnitClass($value);
 
-        return new Duration($databaseUnit->normalize());
+        return new Duration($databaseUnit);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string

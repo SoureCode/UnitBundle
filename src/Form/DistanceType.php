@@ -28,14 +28,16 @@ class DistanceType extends AbstractType
             ]);
 
         $builder->addModelTransformer(new CallbackTransformer(
-            function (?LengthUnitInterface $data): ?array {
+            function (?Distance $data): ?array {
                 if (null === $data) {
                     return null;
                 }
 
+                $value = $data->getValue();
+
                 return [
-                    'value' => (string) $data->getValue(),
-                    'unit' => $data::getUnitType(),
+                    'value' => (string) $value->getValue(),
+                    'unit' => $value::getUnitType(),
                 ];
             },
             function (?array $data): ?Distance {

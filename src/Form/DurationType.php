@@ -128,7 +128,7 @@ class DurationType extends AbstractType
             'day' => false,
             'hour' => true,
             'minute' => true,
-            'second' => true,
+            'second' => false,
         ]);
 
         $resolver->setAllowedTypes('year', 'bool');

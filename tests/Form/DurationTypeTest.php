@@ -19,12 +19,11 @@ class DurationTypeTest extends TypeTestCase
         $form->submit([
             'hour' => '3',
             'minute' => '34',
-            'second' => '12',
         ]);
 
         // Assert
         $this->assertTrue($form->isSynchronized());
-        $this->assertEquals(new Second("12852"), $form->getData()->getValue());
+        $this->assertEquals(new Second("12840"), $form->getData()->getValue());
     }
 
     public function testConfigureAnotherUnit(): void
@@ -32,6 +31,7 @@ class DurationTypeTest extends TypeTestCase
         // Arrange
         $form = $this->factory->create(DurationType::class, null, [
             'month' => true,
+            'second' => true,
         ]);
 
         // Act
@@ -63,7 +63,7 @@ class DurationTypeTest extends TypeTestCase
     public function testWithPreData(): void
     {
         // Arrange
-        $form = $this->factory->create(DurationType::class, Duration::create(new Hour(3)));
+        $form = $this->factory->create(DurationType::class, Duration::create(new Hour(3.2)));
 
         // Act
         $view = $form->createView();
@@ -74,8 +74,8 @@ class DurationTypeTest extends TypeTestCase
             'month' => null,
             'day' => null,
             'hour' => '3',
-            'minute' => '0',
-            'second' => '0',
+            'minute' => '12',
+            'second' => null,
         ], $view->vars['value']);
     }
 

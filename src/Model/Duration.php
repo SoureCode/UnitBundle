@@ -15,6 +15,12 @@ use SoureCode\Bundle\Unit\Model\Time\Year;
 
 final class Duration implements \Stringable
 {
+    public const string FORMAT_SHORT = 'hh:mm';
+    public const string FORMAT_MEDIUM = 'hh:mm:ss';
+    public const string FORMAT_LONG = 'DD.hh:mm:ss';
+    public const string FORMAT_FULL = 'YY.MM.DD.hh:mm:ss';
+    public static string $DEFAULT_FORMAT = self::FORMAT_MEDIUM;
+
     /**
      * @var array{years: int, months: int, days: int, hours: int, minutes: int, seconds: int}|null
      */
@@ -154,8 +160,35 @@ final class Duration implements \Stringable
         return $this->value;
     }
 
-    public function format(string $format = 'D.mm:hh:ss'): string
+    /**
+     * Formats the duration according to the specified format string.
+     *
+     * Available format tokens:
+     * - Y: Years (zero-padded)
+     * - M: Months (zero-padded)
+     * - D: Days (zero-padded)
+     * - h: Hours (zero-padded)
+     * - m: Minutes (zero-padded)
+     * - s: Seconds (zero-padded)
+     *
+     * Predefined formats:
+     * - FORMAT_SHORT: 'hh:mm'
+     * - FORMAT_MEDIUM: 'hh:mm:ss'
+     * - FORMAT_LONG: 'DD.hh:mm:ss'
+     * - FORMAT_FULL: 'YY.MM.DD.hh:mm:ss'
+     *
+     * @param string|null $format The format string to use. If null, uses the default format (self::$DEFAULT_FORMAT)
+     *
+     * @return string The formatted duration string
+     *
+     * @throws \RuntimeException When formatting fails
+     */
+    public function format(?string $format = null): string
     {
+        if (null === $format) {
+            $format = self::$DEFAULT_FORMAT;
+        }
+
         /**
          * @var array{years: int, months: int, days: int, hours: int, minutes: int, seconds: int} $decomposed
          */

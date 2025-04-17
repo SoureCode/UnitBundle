@@ -276,7 +276,7 @@ final class Duration implements \Stringable
     {
         return new self(
             $this->value->convert($unitClass)
-                ->round(0, \RoundingMode::TowardsZero)
+                ->floor()
                 ->convert(Second::class)
         );
     }
@@ -285,7 +285,7 @@ final class Duration implements \Stringable
     {
         return new self(
             $this->value->convert($unitClass)
-                ->round(0, \RoundingMode::AwayFromZero)
+                ->ceil()
                 ->convert(Second::class)
         );
     }
@@ -294,7 +294,7 @@ final class Duration implements \Stringable
     {
         return new self(
             $this->value->convert($unitClass)
-                ->round(0)
+                ->round()
                 ->convert(Second::class)
         );
     }

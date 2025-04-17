@@ -75,7 +75,7 @@ final class Distance implements \Stringable
     {
         return new self(
             $this->value->convert($unitClass)
-                ->round(0, \RoundingMode::TowardsZero)
+                ->floor()
                 ->convert(Meter::class)
         );
     }
@@ -84,7 +84,7 @@ final class Distance implements \Stringable
     {
         return new self(
             $this->value->convert($unitClass)
-                ->round(0, \RoundingMode::AwayFromZero)
+                ->ceil()
                 ->convert(Meter::class)
         );
     }
@@ -93,7 +93,7 @@ final class Distance implements \Stringable
     {
         return new self(
             $this->value->convert($unitClass)
-                ->round(0)
+                ->round()
                 ->convert(Meter::class)
         );
     }

@@ -174,7 +174,7 @@ abstract class AbstractUnit implements UnitInterface
     /**
      * @param class-string<UnitInterface>|string $targetUnitClassOrType
      */
-    public function convert(string $targetUnitClassOrType): UnitInterface
+    public function convert(string $targetUnitClassOrType): self
     {
         $mapping = static::getMapping();
 
@@ -206,7 +206,7 @@ abstract class AbstractUnit implements UnitInterface
         return new $targetUnitClassOrType($convertedValue);
     }
 
-    public function normalize(): UnitInterface
+    public function normalize(): self
     {
         $mapping = static::getMapping();
 

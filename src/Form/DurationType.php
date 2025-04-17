@@ -152,6 +152,20 @@ class DurationType extends AbstractType
 
             return $value;
         });
+
+        $resolver->setNormalizer('empty_data', function (Options $options, $value) {
+            $data = [];
+
+            $fields = ['year', 'month', 'day', 'hour', 'minute', 'second'];
+
+            foreach ($fields as $field) {
+                if (isset($options[$field]) && $options[$field]) {
+                    $data[$field] = 0;
+                }
+            }
+
+            return $data;
+        });
     }
 
     public function getBlockPrefix(): string

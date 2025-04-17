@@ -30,6 +30,10 @@ interface UnitInterface extends \Stringable
 
     public function abs(): static;
 
+    public function clone(): static;
+
+    public function compare(self $unit): int;
+
     public function convert(string $targetUnitClassOrType): self;
 
     public function normalize(): self;

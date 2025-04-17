@@ -266,9 +266,14 @@ final class Duration implements \Stringable
         );
     }
 
+    public function compare(Distance $distance): int
+    {
+        return $this->value->compare($distance->getValue());
+    }
+
     public function getValue(): TimeUnitInterface
     {
-        return $this->value;
+        return $this->value->clone();
     }
 
     public function __toString()

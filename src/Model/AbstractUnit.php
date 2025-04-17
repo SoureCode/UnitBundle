@@ -265,4 +265,14 @@ abstract class AbstractUnit implements UnitInterface
 
         return new $className($value);
     }
+
+    public function clone(): static
+    {
+        return clone $this;
+    }
+
+    public function compare(UnitInterface $unit): int
+    {
+        return $this->getValue()->compare($unit->getValue());
+    }
 }

@@ -98,9 +98,14 @@ final class Distance implements \Stringable
         );
     }
 
+    public function compare(self $distance): int
+    {
+        return $this->value->compare($distance->getValue());
+    }
+
     public function getValue(): LengthUnitInterface
     {
-        return $this->value;
+        return $this->value->clone();
     }
 
     public function __toString()

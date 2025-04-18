@@ -166,6 +166,36 @@ class DurationType extends AbstractType
 
             return $data;
         });
+
+        $resolver->setNormalizer('help', function (Options $options, $value) {
+            if (null === $value) {
+                $dotFields = ['year', 'month', 'day'];
+                $colonFields = ['hour', 'minute', 'second'];
+
+                $dotFields = array_values(array_filter($dotFields, static fn ($field) => isset($options[$field]) && $options[$field]));
+                $colonFields = array_values(array_filter($colonFields, static fn ($field) => isset($options[$field]) && $options[$field]));
+
+                $value = '';
+
+                for ($index = 0, $lastIndex = \count($dotFields); $index < $lastIndex; ++$index) {
+                    if ($index === $lastIndex - 1 && 0 === \count($colonFields)) {
+                        $value .= \sprintf('%ss', $dotFields[$index]);
+                    } else {
+                        $value .= \sprintf('%ss.', $dotFields[$index]);
+                    }
+                }
+
+                for ($index = 0, $lastIndex = \count($colonFields); $index < $lastIndex; ++$index) {
+                    if ($index === $lastIndex - 1) {
+                        $value .= \sprintf('%ss', $colonFields[$index]);
+                    } else {
+                        $value .= \sprintf('%ss:', $colonFields[$index]);
+                    }
+                }
+            }
+
+            return $value;
+        });
     }
 
     public function getBlockPrefix(): string

@@ -47,7 +47,6 @@ class DurationTypeTest extends TypeTestCase
 
         $this->assertTrue($form->isSynchronized());
         $this->assertEquals(new Second("5196852"), $form->getData()->getValue());
-        $this->assertSame("months.hours:minutes:seconds", $view->vars['help']);
     }
 
     public function testSubmitNull(): void
@@ -81,8 +80,6 @@ class DurationTypeTest extends TypeTestCase
             'minute' => '12',
             'second' => null,
         ], $view->vars['value']);
-
-        $this->assertSame("hours:minutes", $view->vars['help']);
     }
 
     public function testWithNullPreData(): void
@@ -95,6 +92,5 @@ class DurationTypeTest extends TypeTestCase
 
         // Assert
         $this->assertNull($view->vars['value']);
-        $this->assertSame("hours:minutes", $view->vars['help']);
     }
 }

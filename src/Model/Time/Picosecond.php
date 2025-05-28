@@ -18,6 +18,8 @@ class Picosecond extends AbstractTimeUnit
 
     public static function getFactor(): Number
     {
-        return new Number(1)->div(10 ** 12, 12);
+        $base = new Number(1);
+
+        return $base->div(10 ** 12, 12);
     }
 }

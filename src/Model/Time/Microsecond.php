@@ -18,6 +18,8 @@ class Microsecond extends AbstractTimeUnit
 
     public static function getFactor(): Number
     {
-        return new Number(1)->div(10 ** 6, 6);
+        $base = new Number(1);
+
+        return $base->div(10 ** 6, 6);
     }
 }

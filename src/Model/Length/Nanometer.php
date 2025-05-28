@@ -19,6 +19,8 @@ class Nanometer extends AbstractLengthUnit
     public static function getFactor(): Number
     {
         // 1e-9 = 1 / 1e9
-        return new Number(1)->div(10 ** 9, 9);
+        $base = new Number(1);
+
+        return $base->div(10 ** 9, 9);
     }
 }

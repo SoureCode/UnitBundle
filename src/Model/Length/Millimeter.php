@@ -19,6 +19,8 @@ class Millimeter extends AbstractLengthUnit
     public static function getFactor(): Number
     {
         // 1e-3 = 1 / 1e3
-        return new Number(1)->div(10 ** 3, 3);
+        $base = new Number(1);
+
+        return $base->div(10 ** 3, 3);
     }
 }

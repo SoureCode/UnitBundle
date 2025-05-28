@@ -19,6 +19,8 @@ class Micrometer extends AbstractLengthUnit
     public static function getFactor(): Number
     {
         // 1e-6 = 1 / 1e6
-        return new Number(1)->div(10 ** 6, 6);
+        $base = new Number(1);
+
+        return $base->div(10 ** 6, 6);
     }
 }

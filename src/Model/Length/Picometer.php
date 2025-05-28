@@ -19,6 +19,8 @@ class Picometer extends AbstractLengthUnit
     public static function getFactor(): Number
     {
         // 1e-12 = 1 / 1e12
-        return new Number(1)->div(10 ** 12, 12);
+        $base = new Number(1);
+
+        return $base->div(10 ** 12, 12);
     }
 }

@@ -19,6 +19,8 @@ class Centimeter extends AbstractLengthUnit
     public static function getFactor(): Number
     {
         // 1e-2 = 1 / 1e2
-        return new Number(1)->div(10 ** 2, 2);
+        $base = new Number(1);
+
+        return $base->div(10 ** 2, 2);
     }
 }

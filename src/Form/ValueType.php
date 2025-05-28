@@ -30,7 +30,7 @@ class ValueType extends AbstractType
 
                 return (float) $value;
             },
-            function ($value) {
+            function (?string $value) {
                 if (null === $value || '' === $value) {
                     return null;
                 }

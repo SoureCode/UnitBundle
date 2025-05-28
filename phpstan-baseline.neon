@@ -1,0 +1,259 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method SoureCode\\Bundle\\Unit\\Tests\\AbstractKernelTestCase\:\:createKernel\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/AbstractKernelTestCase.php
+
+		-
+			message: '#^Parameter \#2 \$unitClass of static method SoureCode\\Bundle\\Unit\\Converter\\LengthConverter\:\:convert\(\) expects class\-string\<SoureCode\\Bundle\\Unit\\Model\\Length\\Meter\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/ConverterTest.php
+
+		-
+			message: '#^Parameter \#2 \$unitClass of static method SoureCode\\Bundle\\Unit\\Converter\\TimeConverter\:\:convert\(\) expects class\-string\<SoureCode\\Bundle\\Unit\\Model\\Time\\Year\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/ConverterTest.php
+
+		-
+			message: '#^Cannot call method format\(\) on SoureCode\\Bundle\\Unit\\Model\\Distance\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Doctrine/TypesTest.php
+
+		-
+			message: '#^Cannot call method totalSeconds\(\) on SoureCode\\Bundle\\Unit\\Model\\Duration\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Doctrine/TypesTest.php
+
+		-
+			message: '#^Method SoureCode\\Bundle\\Unit\\Tests\\Doctrine\\TypesTest\:\:distanceTypeDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Doctrine/TypesTest.php
+
+		-
+			message: '#^Method SoureCode\\Bundle\\Unit\\Tests\\Doctrine\\TypesTest\:\:durationTypeDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Doctrine/TypesTest.php
+
+		-
+			message: '#^Property SoureCode\\Bundle\\Unit\\Tests\\Doctrine\\TypesTest\:\:\$entityManager \(Doctrine\\ORM\\EntityManagerInterface\) does not accept object\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: tests/Doctrine/TypesTest.php
+
+		-
+			message: '#^Property SoureCode\\Bundle\\Unit\\Tests\\Doctrine\\TypesTest\:\:\$repository with generic class Doctrine\\ORM\\EntityRepository does not specify its types\: TEntityClass$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/Doctrine/TypesTest.php
+
+		-
+			message: '#^Parameter \#2 \$className of static method SoureCode\\Bundle\\Unit\\Factory\\LengthFactory\:\:create\(\) expects class\-string\<SoureCode\\Bundle\\Unit\\Model\\Length\\LengthUnitInterface\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/FactoryTest.php
+
+		-
+			message: '#^Parameter \#2 \$className of static method SoureCode\\Bundle\\Unit\\Factory\\TimeFactory\:\:create\(\) expects class\-string\<SoureCode\\Bundle\\Unit\\Model\\Time\\TimeUnitInterface\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/FactoryTest.php
+
+		-
+			message: '#^Unable to resolve the template type T in call to method static method SoureCode\\Bundle\\Unit\\Factory\\LengthFactory\:\:create\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/FactoryTest.php
+
+		-
+			message: '#^Unable to resolve the template type T in call to method static method SoureCode\\Bundle\\Unit\\Factory\\TimeFactory\:\:create\(\)$#'
+			identifier: argument.templateType
+			count: 1
+			path: tests/FactoryTest.php
+
+		-
+			message: '#^Cannot call method format\(\) on SoureCode\\Bundle\\Unit\\Model\\Distance\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: tests/Form/DistanceTypeTest.php
+
+		-
+			message: '#^Parameter \#2 \$message of method PHPUnit\\Framework\\Assert\:\:assertEmpty\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Form/DistanceTypeTest.php
+
+		-
+			message: '#^Cannot call method getValue\(\) on SoureCode\\Bundle\\Unit\\Model\\Duration\|null\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: tests/Form/DurationTypeTest.php
+
+		-
+			message: '#^Binary operation "\." between mixed and string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 10
+			path: tests/Model/AbstractUnitTest.php
+
+		-
+			message: '#^Method SoureCode\\Bundle\\Unit\\Tests\\Model\\AbstractUnitTest\:\:constructDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/AbstractUnitTest.php
+
+		-
+			message: '#^Method SoureCode\\Bundle\\Unit\\Tests\\Model\\AbstractUnitTest\:\:convertDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/AbstractUnitTest.php
+
+		-
+			message: '#^Method SoureCode\\Bundle\\Unit\\Tests\\Model\\AbstractUnitTest\:\:notationDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/AbstractUnitTest.php
+
+		-
+			message: '#^Method SoureCode\\Bundle\\Unit\\Tests\\Model\\AbstractUnitTest\:\:testConvert\(\) has parameter \$expected with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/AbstractUnitTest.php
+
+		-
+			message: '#^Method Model\\DistanceTest\:\:addDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DistanceTest.php
+
+		-
+			message: '#^Method Model\\DistanceTest\:\:ceilDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DistanceTest.php
+
+		-
+			message: '#^Method Model\\DistanceTest\:\:constructorDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DistanceTest.php
+
+		-
+			message: '#^Method Model\\DistanceTest\:\:floorDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DistanceTest.php
+
+		-
+			message: '#^Method Model\\DistanceTest\:\:formatDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DistanceTest.php
+
+		-
+			message: '#^Method Model\\DistanceTest\:\:roundDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DistanceTest.php
+
+		-
+			message: '#^Method Model\\DistanceTest\:\:subDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DistanceTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method SoureCode\\Bundle\\Unit\\Model\\Distance\:\:add\(\) expects BcMath\\Number\|float\|int\|SoureCode\\Bundle\\Unit\\Model\\Distance\|SoureCode\\Bundle\\Unit\\Model\\Length\\LengthUnitInterface\|string, BcMath\\Number\|DateInterval\|float\|int\|SoureCode\\Bundle\\Unit\\Model\\Distance\|SoureCode\\Bundle\\Unit\\Model\\Length\\LengthUnitInterface\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Model/DistanceTest.php
+
+		-
+			message: '#^Parameter \#1 \$value of method SoureCode\\Bundle\\Unit\\Model\\Distance\:\:sub\(\) expects BcMath\\Number\|float\|int\|SoureCode\\Bundle\\Unit\\Model\\Distance\|SoureCode\\Bundle\\Unit\\Model\\Length\\LengthUnitInterface\|string, BcMath\\Number\|DateInterval\|float\|int\|SoureCode\\Bundle\\Unit\\Model\\Distance\|SoureCode\\Bundle\\Unit\\Model\\Length\\LengthUnitInterface\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/Model/DistanceTest.php
+
+		-
+			message: '#^Method Model\\DurationTest\:\:addDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DurationTest.php
+
+		-
+			message: '#^Method Model\\DurationTest\:\:ceilDataProvider\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: tests/Model/DurationTest.php
+
+		-
+			message: '#^Method Model\\DurationTest\:\:constructorDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DurationTest.php
+
+		-
+			message: '#^Method Model\\DurationTest\:\:floorDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DurationTest.php
+
+		-
+			message: '#^Method Model\\DurationTest\:\:formatDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DurationTest.php
+
+		-
+			message: '#^Method Model\\DurationTest\:\:roundDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DurationTest.php
+
+		-
+			message: '#^Method Model\\DurationTest\:\:subDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DurationTest.php
+
+		-
+			message: '#^Method Model\\DurationTest\:\:totalsDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/DurationTest.php
+
+		-
+			message: '#^Method Model\\IntervalTest\:\:createDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/IntervalTest.php
+
+		-
+			message: '#^Method Model\\StaticValueTest\:\:symbolDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/StaticValueTest.php
+
+		-
+			message: '#^Method Model\\StaticValueTest\:\:unitTypeDataProvider\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/Model/StaticValueTest.php
+
+		-
+			message: '#^Method SoureCode\\Bundle\\Unit\\Tests\\NormalizerTest\:\:lengthDataProvider\(\) should return array\<array\<int, string\>\> but returns array\<int, list\<float\|int\|string\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/NormalizerTest.php
+
+		-
+			message: '#^Method SoureCode\\Bundle\\Unit\\Tests\\NormalizerTest\:\:timeDataProvider\(\) should return array\<array\<int, string\>\> but returns array\<int, list\<float\|int\|string\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: tests/NormalizerTest.php

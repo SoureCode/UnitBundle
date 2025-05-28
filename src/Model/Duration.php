@@ -3,7 +3,6 @@
 namespace SoureCode\Bundle\Unit\Model;
 
 use BcMath\Number;
-use JetBrains\PhpStorm\ArrayShape;
 use SoureCode\Bundle\Unit\Model\Time\Day;
 use SoureCode\Bundle\Unit\Model\Time\Hour;
 use SoureCode\Bundle\Unit\Model\Time\Minute;
@@ -22,18 +21,16 @@ final class Duration implements \Stringable
     public static string $DEFAULT_FORMAT = self::FORMAT_MEDIUM;
 
     /**
-     * @var array{years: int, months: int, days: int, hours: int, minutes: int, seconds: int}|null
+     * @var array{year: int, month: int, day: int, hour: int, minute: int, second: int}|null
      */
     private ?array $decomposed = null;
 
-    private TimeUnitInterface $value;
+    private Second $value;
 
-    public function __construct(UnitInterface|TimeUnitInterface|Number|string|float|int $value)
+    public function __construct(TimeUnitInterface|Number|string|float|int $value)
     {
         if ($value instanceof TimeUnitInterface) {
             $this->value = $value->convert(Second::class);
-        } elseif ($value instanceof UnitInterface) {
-            throw new \InvalidArgumentException(\sprintf('Unit must be of type %s.', TimeUnitInterface::class));
         } else {
             $this->value = new Second($value);
         }
@@ -49,17 +46,14 @@ final class Duration implements \Stringable
         return new self($value);
     }
 
+    public function years(): int
+    {
+        return $this->decompose()['year'];
+    }
+
     /**
-     * @return array{years: int, months: int, days: int, hours: int, minutes: int, seconds: int}
+     * @return array{year: int, month: int, day: int, hour: int, minute: int, second: int}
      */
-    #[ArrayShape([
-        'years' => 'int',
-        'months' => 'int',
-        'days' => 'int',
-        'hours' => 'int',
-        'minutes' => 'int',
-        'seconds' => 'int',
-    ])]
     public function decompose(): array
     {
         if (null === $this->decomposed) {
@@ -83,81 +77,178 @@ final class Duration implements \Stringable
             $seconds = $delta->totalSeconds()->round(0, \RoundingMode::TowardsZero);
 
             $this->decomposed = [
-                'years' => (int) $years->getValue()->value,
-                'months' => (int) $months->getValue()->value,
-                'days' => (int) $days->getValue()->value,
-                'hours' => (int) $hours->getValue()->value,
-                'minutes' => (int) $minutes->getValue()->value,
-                'seconds' => (int) $seconds->getValue()->value,
+                'year' => (int) $years->getValue()->value,
+                'month' => (int) $months->getValue()->value,
+                'day' => (int) $days->getValue()->value,
+                'hour' => (int) $hours->getValue()->value,
+                'minute' => (int) $minutes->getValue()->value,
+                'second' => (int) $seconds->getValue()->value,
             ];
         }
 
         return $this->decomposed;
     }
 
-    public function years(): int
+    /**
+     * @param class-string<TimeUnitInterface> $unitClass
+     */
+    public function round(string $unitClass = Minute::class): self
     {
-        return $this->decompose()['years'];
+        return new self(
+            $this->value->convert($unitClass)
+                ->round()
+                ->convert(Second::class)
+        );
     }
 
-    public function months(): int
-    {
-        return $this->decompose()['months'];
-    }
-
-    public function days(): int
-    {
-        return $this->decompose()['days'];
-    }
-
-    public function hours(): int
-    {
-        return $this->decompose()['hours'];
-    }
-
-    public function minutes(): int
-    {
-        return $this->decompose()['minutes'];
-    }
-
-    public function seconds(): int
-    {
-        return $this->decompose()['seconds'];
-    }
-
-    public function totalYears(): TimeUnitInterface
+    public function totalYears(): Year
     {
         return $this->value->convert(Year::class);
     }
 
-    public function totalMonths(): TimeUnitInterface
+    public function sub(self|\DateInterval|TimeUnitInterface|Number|string|float|int $duration): self
+    {
+        if ($duration instanceof \DateInterval) {
+            $duration = self::fromDateInterval($duration);
+        }
+
+        if ($duration instanceof TimeUnitInterface) {
+            $second = $duration->convert(Second::class);
+
+            return new self($this->value->getValue()->sub($second->getValue()));
+        }
+
+        if ($duration instanceof self) {
+            return new self($this->value->getValue()->sub($duration->value->getValue()));
+        }
+
+        $second = new Second($duration);
+
+        return new self($this->value->getValue()->sub($second->getValue()));
+    }
+
+    private static function fromDateInterval(\DateInterval $duration): self
+    {
+        $now = new \DateTimeImmutable();
+        $future = $now->add($duration);
+        $seconds = $future->getTimestamp() - $now->getTimestamp();
+
+        return new self(new Second($seconds));
+    }
+
+    public function add(self|\DateInterval|TimeUnitInterface|Number|string|float|int $duration): self
+    {
+        if ($duration instanceof \DateInterval) {
+            $duration = self::fromDateInterval($duration);
+        }
+
+        if ($duration instanceof TimeUnitInterface) {
+            $second = $duration->convert(Second::class);
+
+            return new self($this->value->getValue()->add($second->getValue()));
+        }
+
+        if ($duration instanceof self) {
+            return new self($this->value->getValue()->add($duration->value->getValue()));
+        }
+
+        $second = new Second($duration);
+
+        return new self($this->value->getValue()->add($second->getValue()));
+    }
+
+    public function getValue(): TimeUnitInterface
+    {
+        return $this->value->clone();
+    }
+
+    public function totalMonths(): Month
     {
         return $this->value->convert(Month::class);
     }
 
-    public function totalWeeks(): TimeUnitInterface
-    {
-        return $this->value->convert(Week::class);
-    }
-
-    public function totalDays(): TimeUnitInterface
+    public function totalDays(): Day
     {
         return $this->value->convert(Day::class);
     }
 
-    public function totalHours(): TimeUnitInterface
+    public function totalHours(): Hour
     {
         return $this->value->convert(Hour::class);
     }
 
-    public function totalMinutes(): TimeUnitInterface
+    public function totalMinutes(): Minute
     {
         return $this->value->convert(Minute::class);
     }
 
-    public function totalSeconds(): TimeUnitInterface
+    public function totalSeconds(): Second
     {
         return $this->value;
+    }
+
+    public function months(): int
+    {
+        return $this->decompose()['month'];
+    }
+
+    public function days(): int
+    {
+        return $this->decompose()['day'];
+    }
+
+    public function hours(): int
+    {
+        return $this->decompose()['hour'];
+    }
+
+    public function minutes(): int
+    {
+        return $this->decompose()['minute'];
+    }
+
+    public function seconds(): int
+    {
+        return $this->decompose()['second'];
+    }
+
+    public function totalWeeks(): Week
+    {
+        return $this->value->convert(Week::class);
+    }
+
+    /**
+     * @param class-string<TimeUnitInterface> $className
+     */
+    public function floor(string $className = Minute::class): self
+    {
+        return new self(
+            $this->value->convert($className)
+                ->floor()
+                ->convert(Second::class)
+        );
+    }
+
+    /**
+     * @param class-string<TimeUnitInterface> $className
+     */
+    public function ceil(string $className = Minute::class): self
+    {
+        return new self(
+            $this->value->convert($className)
+                ->ceil()
+                ->convert(Second::class)
+        );
+    }
+
+    public function compare(Distance $distance): int
+    {
+        return $this->value->compare($distance->getValue());
+    }
+
+    public function __toString()
+    {
+        return $this->format();
     }
 
     /**
@@ -197,14 +288,17 @@ final class Duration implements \Stringable
         /**
          * @var string|null $formatted
          */
-        $formatted = preg_replace_callback('/([YMDhms])\1*/', static function ($matches) use ($decomposed) {
+        $formatted = preg_replace_callback('/([YMDhms])\1*/', static function (array $matches) use ($decomposed) {
+            /**
+             * @var array<string, string> $mapping
+             */
             static $mapping = [
-                'Y' => 'years',
-                'M' => 'months',
-                'D' => 'days',
-                'h' => 'hours',
-                'm' => 'minutes',
-                's' => 'seconds',
+                'Y' => 'year',
+                'M' => 'month',
+                'D' => 'day',
+                'h' => 'hour',
+                'm' => 'minute',
+                's' => 'second',
             ];
 
             $token = $matches[0];
@@ -219,98 +313,5 @@ final class Duration implements \Stringable
         }
 
         return $formatted;
-    }
-
-    private static function fromDateInterval(\DateInterval $duration): self
-    {
-        $now = new \DateTimeImmutable();
-        $future = $now->add($duration);
-        $seconds = $future->getTimestamp() - $now->getTimestamp();
-
-        return new self(new Second($seconds));
-    }
-
-    public function sub(self|\DateInterval|TimeUnitInterface|Number|string|float|int $duration): self
-    {
-        if ($duration instanceof \DateInterval) {
-            $duration = self::fromDateInterval($duration);
-        }
-
-        if ($duration instanceof TimeUnitInterface) {
-            $duration = $duration->convert(Second::class);
-
-            return new self($this->value->getValue()->sub($duration->getValue()));
-        }
-
-        if ($duration instanceof self) {
-            return new self($this->value->getValue()->sub($duration->value->getValue()));
-        }
-
-        $second = new Second($duration);
-
-        return new self($this->value->getValue()->sub($second->getValue()));
-    }
-
-    public function add(self|\DateInterval|TimeUnitInterface|Number|string|float|int $duration): self
-    {
-        if ($duration instanceof \DateInterval) {
-            $duration = self::fromDateInterval($duration);
-        }
-
-        if ($duration instanceof TimeUnitInterface) {
-            $duration = $duration->convert(Second::class);
-
-            return new self($this->value->getValue()->add($duration->getValue()));
-        }
-
-        if ($duration instanceof self) {
-            return new self($this->value->getValue()->add($duration->value->getValue()));
-        }
-
-        $second = new Second($duration);
-
-        return new self($this->value->getValue()->add($second->getValue()));
-    }
-
-    public function floor(string $unitClass = Minute::class): self
-    {
-        return new self(
-            $this->value->convert($unitClass)
-                ->floor()
-                ->convert(Second::class)
-        );
-    }
-
-    public function ceil(string $unitClass = Minute::class): self
-    {
-        return new self(
-            $this->value->convert($unitClass)
-                ->ceil()
-                ->convert(Second::class)
-        );
-    }
-
-    public function round(string $unitClass = Minute::class): self
-    {
-        return new self(
-            $this->value->convert($unitClass)
-                ->round()
-                ->convert(Second::class)
-        );
-    }
-
-    public function compare(Distance $distance): int
-    {
-        return $this->value->compare($distance->getValue());
-    }
-
-    public function getValue(): TimeUnitInterface
-    {
-        return $this->value->clone();
-    }
-
-    public function __toString()
-    {
-        return $this->format();
     }
 }

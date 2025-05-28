@@ -29,12 +29,6 @@ final class SoureCodeUnitBundle extends AbstractBundle
         // @formatter:on
     }
 
-    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
-    {
-        $parameters = $container->parameters();
-        $services = $container->services();
-    }
-
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../config/packages/*.php');

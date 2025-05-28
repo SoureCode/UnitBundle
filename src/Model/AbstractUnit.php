@@ -3,6 +3,7 @@
 namespace SoureCode\Bundle\Unit\Model;
 
 use BcMath\Number;
+use SoureCode\Bundle\Unit\Converter\AbstractConverter;
 
 abstract class AbstractUnit implements UnitInterface
 {
@@ -11,13 +12,16 @@ abstract class AbstractUnit implements UnitInterface
 
     protected readonly Number $value;
 
-    public function __construct(Number|string|int|float $value)
+    final public function __construct(Number|string|int|float $value)
     {
         if (\is_float($value)) {
             $value = (string) $value;
         }
 
         if (\is_string($value)) {
+            /**
+             * @var list<string> $groupings
+             */
             static $groupings = ['_', ','];
             $value = str_replace($groupings, '', $value);
         }
@@ -34,31 +38,7 @@ abstract class AbstractUnit implements UnitInterface
             }
         }
 
-        $this->value = self::fixTrailingZeros($value);
-    }
-
-    public static function getChoices(): array
-    {
-        static $cachedChoices = null;
-
-        if (null === $cachedChoices) {
-            $cachedChoices = [];
-
-            foreach (static::getCases() as $case) {
-                $cachedChoices[$case->name] = $case->value;
-            }
-        }
-
-        return $cachedChoices;
-    }
-
-    public static function fixTrailingZeros(Number $number): Number
-    {
-        if (str_contains($number->value, '.')) {
-            return new Number(rtrim(rtrim($number->value, '0'), '.'));
-        }
-
-        return $number;
+        $this->value = AbstractConverter::fixTrailingZeros($value);
     }
 
     /**
@@ -109,6 +89,40 @@ abstract class AbstractUnit implements UnitInterface
         }
 
         return $mantissa;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function getChoices(): array
+    {
+        /**
+         * @var array<string, string>|null $cachedChoices
+         */
+        static $cachedChoices = null;
+
+        if (null === $cachedChoices) {
+            $cachedChoices = static::doGetChoices();
+        }
+
+        return $cachedChoices;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    protected static function doGetChoices(): array
+    {
+        /**
+         * @var array<string, string> $choices
+         */
+        $choices = [];
+
+        foreach (static::getCases() as $case) {
+            $choices[$case->name] = (string) $case->value;
+        }
+
+        return $choices;
     }
 
     public function __toString(): string
@@ -164,106 +178,6 @@ abstract class AbstractUnit implements UnitInterface
         }
 
         return new static($value);
-    }
-
-    /**
-     * @return array<string, class-string<UnitInterface>>
-     */
-    abstract public static function getMapping(): array;
-
-    /**
-     * @param class-string<UnitInterface>|string $targetUnitClassOrType
-     */
-    public function convert(string $targetUnitClassOrType): self
-    {
-        $mapping = static::getMapping();
-
-        if (!\in_array($targetUnitClassOrType, $mapping, true)) {
-            if (!\array_key_exists($targetUnitClassOrType, $mapping)) {
-                throw new \InvalidArgumentException(\sprintf("Conversion from '%s' to '%s' is not supported.", static::class, $targetUnitClassOrType));
-            }
-
-            $targetUnitClassOrType = $mapping[$targetUnitClassOrType];
-        }
-
-        if (static::class === $targetUnitClassOrType) {
-            return clone $this;
-        }
-
-        $valueFactor = $this::getFactor();
-        $targetFactor = $targetUnitClassOrType::getFactor();
-
-        $value = $this->getValue();
-
-        $baseValue = self::fixTrailingZeros($value->mul($valueFactor));
-
-        if (0 === $targetFactor->compare(new Number(0))) {
-            throw new \LogicException('Target factor cannot be zero.');
-        }
-
-        $convertedValue = self::fixTrailingZeros($baseValue->div($targetFactor));
-
-        return new $targetUnitClassOrType($convertedValue);
-    }
-
-    public function normalize(): self
-    {
-        $mapping = static::getMapping();
-
-        if (0 === $this->value->compare(new Number(0))) {
-            return new static(0);
-        }
-
-        $candidates = [];
-
-        foreach ($mapping as $unitClass) {
-            $converted = $this->convert($unitClass);
-            $absValue = abs((float) $converted->getValue()->value);
-
-            // Collect candidates where the number is at least 1.
-            if ($absValue >= 1) {
-                $candidates[] = [
-                    'unit' => $converted,
-                    'value' => $absValue,
-                ];
-            }
-        }
-
-        // >= 1
-        if (0 !== \count($candidates)) {
-            usort($candidates, static function ($a, $b) {
-                return $a['value'] <=> $b['value'];
-            });
-
-            return $candidates[0]['unit'];
-        }
-
-        // < 1
-        $bestCandidate = null;
-
-        foreach ($mapping as $unitClass) {
-            $converted = $this->convert($unitClass);
-            $absValue = abs((float) $converted->getValue()->value);
-
-            if (null === $bestCandidate || $absValue > $bestCandidate['value']) {
-                $bestCandidate = ['unit' => $converted, 'value' => $absValue];
-            }
-        }
-
-        return $bestCandidate['unit'] ?? $this;
-    }
-
-    public static function create(Number|string|int|float $value, string $unitType): static
-    {
-        $mapping = static::getMapping();
-
-        if (!\array_key_exists($unitType, $mapping)) {
-            throw new \InvalidArgumentException(\sprintf('Invalid prefix: %s', $unitType));
-        }
-
-        $className = $mapping[$unitType];
-
-        return new $className($value);
     }
 
     public function clone(): static

@@ -54,7 +54,6 @@ final readonly class Interval
                 break;
             default:
                 throw new \InvalidArgumentException(TimeUnitType::class.'::'.$unit->name.' is not supported');
-                break;
         }
 
         return new self($startedAt, $stoppedAt);

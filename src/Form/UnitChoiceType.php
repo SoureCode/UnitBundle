@@ -58,7 +58,7 @@ class UnitChoiceType extends AbstractType
         });
 
         $resolver->setAllowedValues('default_unit_class', function (?string $value): bool {
-            return is_subclass_of($value, UnitInterface::class) || null === $value;
+            return null === $value || is_subclass_of($value, UnitInterface::class);
         });
     }
 

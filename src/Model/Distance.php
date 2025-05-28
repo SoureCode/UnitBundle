@@ -11,12 +11,10 @@ final class Distance implements \Stringable
 {
     private LengthUnitInterface $value;
 
-    public function __construct(UnitInterface|LengthUnitInterface|Number|string|float|int $value)
+    public function __construct(LengthUnitInterface|Number|string|float|int $value)
     {
         if ($value instanceof LengthUnitInterface) {
             $this->value = $value->convert(Meter::class);
-        } elseif ($value instanceof UnitInterface) {
-            throw new \InvalidArgumentException(\sprintf('Unit must be of type %s.', LengthUnitInterface::class));
         } else {
             $this->value = new Meter($value);
         }
@@ -30,11 +28,6 @@ final class Distance implements \Stringable
     public static function create(LengthUnitInterface|Number|string|float|int $value): self
     {
         return new self($value);
-    }
-
-    public function format(): string
-    {
-        return $this->value->normalize()->format();
     }
 
     public function sub(self|LengthUnitInterface|Number|string|float|int $value): self
@@ -54,6 +47,11 @@ final class Distance implements \Stringable
         return new self($this->value->getValue()->sub($meter->getValue()));
     }
 
+    public function getValue(): LengthUnitInterface
+    {
+        return $this->value->clone();
+    }
+
     public function add(self|LengthUnitInterface|Number|string|float|int $value): self
     {
         if ($value instanceof LengthUnitInterface) {
@@ -71,28 +69,37 @@ final class Distance implements \Stringable
         return new self($this->value->getValue()->add($meter->getValue()));
     }
 
-    public function floor(string $unitClass = Kilometer::class): self
+    /**
+     * @param class-string<LengthUnitInterface> $className
+     */
+    public function floor(string $className = Kilometer::class): self
     {
         return new self(
-            $this->value->convert($unitClass)
+            $this->value->convert($className)
                 ->floor()
                 ->convert(Meter::class)
         );
     }
 
-    public function ceil(string $unitClass = Kilometer::class): self
+    /**
+     * @param class-string<LengthUnitInterface> $className
+     */
+    public function ceil(string $className = Kilometer::class): self
     {
         return new self(
-            $this->value->convert($unitClass)
+            $this->value->convert($className)
                 ->ceil()
                 ->convert(Meter::class)
         );
     }
 
-    public function round(string $unitClass = Kilometer::class): self
+    /**
+     * @param class-string<LengthUnitInterface> $className
+     */
+    public function round(string $className = Kilometer::class): self
     {
         return new self(
-            $this->value->convert($unitClass)
+            $this->value->convert($className)
                 ->round()
                 ->convert(Meter::class)
         );
@@ -103,13 +110,13 @@ final class Distance implements \Stringable
         return $this->value->compare($distance->getValue());
     }
 
-    public function getValue(): LengthUnitInterface
-    {
-        return $this->value->clone();
-    }
-
     public function __toString()
     {
         return $this->format();
+    }
+
+    public function format(): string
+    {
+        return $this->value->normalize()->format();
     }
 }

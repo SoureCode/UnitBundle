@@ -1,11 +1,13 @@
-# dependencies
+# dependencies & tools
 vendor/
+tools/
 
 # caches, logs etc.
 composer.lock
 .phpunit.cache
 .php-cs-fixer.cache
 .phpbench/
+coverage/
 
 # script-templates
 ## Ignore all subdirectories under scripts (script-template folders)

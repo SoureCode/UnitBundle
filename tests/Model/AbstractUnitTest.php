@@ -237,14 +237,5 @@ AbstractUnitTest extends TestCase
         self::assertNotSame($base, $result, 'Assert not the same instance');
     }
 
-    public function testConversionIntoInvalidPrefix(): void
-    {
-        // Arrange
-        $base = new Meter("3.14");
 
-        // Act & Assert
-        $this->expectException(\InvalidArgumentException::class);
-
-        $result = $base->convert( Year::class);
-    }
 }

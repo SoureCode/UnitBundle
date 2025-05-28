@@ -3,14 +3,14 @@
 namespace SoureCode\Bundle\Unit\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\FloatType;
+use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Type;
 use SoureCode\Bundle\Unit\Model\Duration;
 use SoureCode\Bundle\Unit\Model\Time\Picosecond;
 use SoureCode\Bundle\Unit\Model\Time\TimeUnitInterface;
 use SoureCode\Bundle\Unit\Model\UnitInterface;
 
-class DurationType extends FloatType
+class DurationType extends Type
 {
     public const string NAME = 'duration';
 
@@ -18,6 +18,11 @@ class DurationType extends FloatType
      * @var class-string<TimeUnitInterface>
      */
     public static string $databaseUnitClass = Picosecond::class;
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getFloatDeclarationSQL($column);
+    }
 
     public function convertToPHPValue($value, AbstractPlatform $platform): ?Duration
     {
@@ -35,14 +40,14 @@ class DurationType extends FloatType
         return new Duration($databaseUnit);
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {
             return null;
         }
 
         if (!$value instanceof Duration) {
-            throw ConversionException::conversionFailedInvalidType($value, static::NAME, [UnitInterface::class]);
+            throw InvalidType::new($value, static::NAME, [UnitInterface::class]);
         }
 
         /**

@@ -6,7 +6,6 @@ use SoureCode\Bundle\Unit\Model\Distance;
 use SoureCode\Bundle\Unit\Model\Length\AbstractLengthUnit;
 use SoureCode\Bundle\Unit\Model\Length\LengthUnitInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -27,33 +26,7 @@ class DistanceType extends AbstractType
                 'unit_class' => AbstractLengthUnit::class,
             ]);
 
-        $builder->addModelTransformer(new CallbackTransformer(
-            function (?Distance $data): ?array {
-                if (null === $data) {
-                    return null;
-                }
-
-                $value = $data->getValue()->normalize();
-
-                return [
-                    'value' => (string) $value->getValue(),
-                    'unit' => $value::getUnitType(),
-                ];
-            },
-            function (?array $data): ?Distance {
-                if (null === $data) {
-                    return null;
-                }
-
-                if (null === $data['unit'] || null === $data['value']) {
-                    return null;
-                }
-
-                $unit = AbstractLengthUnit::create($data['value'], $data['unit']);
-
-                return Distance::create($unit);
-            }
-        ));
+        $builder->addModelTransformer(new DistanceDataTransformer());
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -69,7 +42,7 @@ class DistanceType extends AbstractType
         ]);
 
         $resolver->setAllowedValues('default_unit_class', function (?string $value): bool {
-            return is_subclass_of($value, LengthUnitInterface::class) || null === $value;
+            return null === $value || is_subclass_of($value, LengthUnitInterface::class);
         });
     }
 

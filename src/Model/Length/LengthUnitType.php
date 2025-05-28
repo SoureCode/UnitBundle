@@ -15,18 +15,22 @@ enum LengthUnitType: string
     case NANOMETER = 'nanometer';
     case PICOMETER = 'picometer';
 
-    public static function getChoices(): array
+    /**
+     * @return class-string<LengthUnitInterface>
+     */
+    public function toClassName(): string
     {
-        $keys = array_map(
-            static fn (LengthUnitType $prefix): string => $prefix->value,
-            self::cases()
-        );
-
-        $values = array_map(
-            static fn (string $key): string => LengthUnitType::from($key)->name,
-            $keys,
-        );
-
-        return array_flip(array_combine($keys, $values));
+        return match ($this) {
+            self::KILOMETER => Kilometer::class,
+            self::HECTOMETER => Hectometer::class,
+            self::DECAMETER => Decameter::class,
+            self::METER => Meter::class,
+            self::DECIMETER => Decimeter::class,
+            self::CENTIMETER => Centimeter::class,
+            self::MILLIMETER => Millimeter::class,
+            self::MICROMETER => Micrometer::class,
+            self::NANOMETER => Nanometer::class,
+            self::PICOMETER => Picometer::class,
+        };
     }
 }

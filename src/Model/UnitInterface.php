@@ -12,10 +12,14 @@ interface UnitInterface extends \Stringable
 
     public static function getFactor(): Number;
 
+    /**
+     * @return list<\BackedEnum>
+     */
     public static function getCases(): array;
 
-    public static function getMapping(): array;
-
+    /**
+     * @return array<string, string>
+     */
     public static function getChoices(): array;
 
     public function getValue(): Number;
@@ -34,9 +38,14 @@ interface UnitInterface extends \Stringable
 
     public function compare(self $unit): int;
 
-    public function convert(string $targetUnitClassOrType): self;
+    /**
+     * @phpstan-template T of UnitInterface
+     *
+     * @phpstan-param class-string<T> $className
+     *
+     * @phpstan-return T
+     */
+    public function convert(string $className): self;
 
     public function normalize(): self;
-
-    public static function create(Number|string|int|float $value, string $unitType): static;
 }

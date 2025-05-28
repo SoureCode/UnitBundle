@@ -2,6 +2,8 @@
 
 namespace SoureCode\Bundle\Unit\Model\Time;
 
+use BcMath\Number;
+
 enum TimeUnitType: string
 {
     case SECOND = 'second';
@@ -41,5 +43,31 @@ enum TimeUnitType: string
             'year', 'years' => 'year',
             default => $unit,
         };
+    }
+
+    /**
+     * @return class-string<TimeUnitInterface>
+     */
+    public function toClassName(): string
+    {
+        return match ($this) {
+            self::YEAR => Year::class,
+            self::MONTH => Month::class,
+            self::WEEK => Week::class,
+            self::DAY => Day::class,
+            self::HOUR => Hour::class,
+            self::MINUTE => Minute::class,
+            self::SECOND => Second::class,
+            self::MILLISECOND => Millisecond::class,
+            self::MICROSECOND => Microsecond::class,
+            self::NANOSECOND => Nanosecond::class,
+            self::PICOSECOND => Picosecond::class,
+            default => throw new \Exception('Unsupported time unit'),
+        };
+    }
+
+    public function create(Number|string|int|float $value): TimeUnitInterface
+    {
+        return new ($this->toClassName())($value);
     }
 }

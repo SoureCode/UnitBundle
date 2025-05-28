@@ -3,14 +3,14 @@
 namespace SoureCode\Bundle\Unit\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\FloatType;
+use Doctrine\DBAL\Types\Exception\InvalidType;
+use Doctrine\DBAL\Types\Type;
 use SoureCode\Bundle\Unit\Model\Distance;
 use SoureCode\Bundle\Unit\Model\Length\LengthUnitInterface;
 use SoureCode\Bundle\Unit\Model\Length\Picometer;
 use SoureCode\Bundle\Unit\Model\UnitInterface;
 
-class DistanceType extends FloatType
+class DistanceType extends Type
 {
     public const string NAME = 'distance';
 
@@ -18,6 +18,11 @@ class DistanceType extends FloatType
      * @var class-string<LengthUnitInterface>
      */
     public static string $databaseUnitClass = Picometer::class;
+
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return $platform->getFloatDeclarationSQL($column);
+    }
 
     public function convertToPHPValue($value, AbstractPlatform $platform): ?Distance
     {
@@ -35,14 +40,14 @@ class DistanceType extends FloatType
         return new Distance($databaseUnit->normalize());
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {
             return null;
         }
 
         if (!$value instanceof Distance) {
-            throw ConversionException::conversionFailedInvalidType($value, static::NAME, [UnitInterface::class]);
+            throw InvalidType::new($value, static::NAME, [UnitInterface::class]);
         }
 
         /**

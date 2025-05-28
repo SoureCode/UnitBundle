@@ -1,7 +1,15 @@
 
 # sourecode/unit-bundle
 
+[![Packagist Version](https://img.shields.io/packagist/v/sourecode/unit-bundle.svg)](https://packagist.org/packages/sourecode/unit-bundle)
+[![Downloads](https://img.shields.io/packagist/dt/sourecode/unit-bundle.svg)](https://packagist.org/packages/sourecode/unit-bundle)
+[![CI](https://github.com/SoureCode/UnitBundle/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SoureCode/UnitBundle/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/SoureCode/UnitBundle/branch/master/graph/badge.svg?token=ZEGEZJEQ1B)](https://codecov.io/gh/SoureCode/UnitBundle)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FSoureCode%2FUnitBundle%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/SoureCode/UnitBundle/master)
+
 This bundle provides a simple way to handle unit of measurements in Symfony applications.
+
+- [License](./LICENSE)
 
 ## Installation
 

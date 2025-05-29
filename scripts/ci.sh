@@ -15,9 +15,10 @@ symfony composer validate --no-ansi --strict composer.json
 
 kyx composer-normalize --dry-run
 kyx composer-require-checker check
-kyx php-cs-fixer fix --dry-run --show-progress=dots --using-cache=no --verbose
+kyx composer-unused
+FORCED_PHP_VERSION=8.3 kyx php-cs-fixer fix --dry-run --show-progress=dots --using-cache=no --verbose
 kyx phpstan analyse --memory-limit=512M --ansi --no-progress --error-format=table
 vendor/bin/phpunit
-kyx infection --min-msi=65 --min-covered-msi=70 --threads=4
+kyx infection "-j$(nproc)"
 
 popd >/dev/null

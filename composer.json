@@ -12,15 +12,12 @@
     "require": {
         "php": ">=8.4",
         "ext-bcmath": "*",
-        "ext-intl": "*",
         "ext-mbstring": "*",
         "doctrine/dbal": "^4.2.3",
-        "jetbrains/phpstorm-attributes": "^1.2",
         "symfony/config": "^7.1",
         "symfony/dependency-injection": "^7.1",
         "symfony/form": "^7.1",
         "symfony/http-kernel": "^7.1",
-        "symfony/intl": "^7.1",
         "symfony/options-resolver": "^7.1"
     },
     "require-dev": {
